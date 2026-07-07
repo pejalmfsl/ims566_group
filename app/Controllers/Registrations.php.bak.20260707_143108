@@ -14,7 +14,7 @@ class Registrations extends BaseController
         'email' => 'required|valid_email|max_length[150]',
         'phone_number' => 'required|max_length[30]',
         'faculty' => 'required|max_length[100]',
-        'programme' => 'permit_empty|max_length[100]',
+        'programme' => 'required|max_length[100]',
     ];
 
     public function create(string $token)
@@ -64,7 +64,7 @@ class Registrations extends BaseController
             'email' => $this->request->getPost('email'),
             'phone_number' => $this->request->getPost('phone_number'),
             'faculty' => $this->request->getPost('faculty'),
-            'programme' => (string) $this->request->getPost('programme'),
+            'programme' => $this->request->getPost('programme'),
             'status' => 'registered',
             'register_date' => date('Y-m-d H:i:s'),
         ]);

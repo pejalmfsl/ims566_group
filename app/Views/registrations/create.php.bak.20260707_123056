@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,39 +8,13 @@
     <link href="<?= base_url('/public/assets/css/uitm-theme.css') ?>" rel="stylesheet">
 </head>
 <body class="uitm-page">
-    <?php
-    $facultyOptions = [
-        'Faculty of Information Science',
-        'Faculty of Computer and Mathematical Sciences',
-        'Faculty of Business and Management',
-        'Faculty of Accountancy',
-        'Faculty of Administrative Science and Policy Studies',
-        'Faculty of Communication and Media Studies',
-        'Faculty of Law',
-        'Faculty of Education',
-        'Faculty of Art and Design',
-        'Faculty of Health Sciences',
-        'Faculty of Pharmacy',
-        'Faculty of Medicine',
-        'Faculty of Dentistry',
-        'Faculty of Engineering',
-        'Faculty of Architecture, Planning and Surveying',
-        'Faculty of Applied Sciences',
-        'Faculty of Plantation and Agrotechnology',
-        'Faculty of Sports Science and Recreation',
-        'Faculty of Hotel and Tourism Management',
-        'Faculty of Music',
-        'Other',
-    ];
-    $selectedFaculty = old('faculty');
-    ?>
     <main class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-9">
                 <div class="text-center text-white mb-4">
                     <img src="<?= base_url('/public/uitm-logo.svg') ?>" alt="Logo UiTM" class="img-fluid uitm-logo-sm bg-white rounded-4 shadow-sm p-3 mb-3">
                     <p class="text-warning fw-semibold text-uppercase mb-1">Universiti Teknologi MARA</p>
-                    <h1 class="h2 fw-bold mb-0">Event Registration</h1>
+                    <h1 class="h2 fw-bold mb-0">Pendaftaran Aktiviti</h1>
                 </div>
 
                 <?php if (session()->getFlashdata('success')): ?>
@@ -67,11 +41,11 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="border rounded-3 p-3 bg-light">
-                                    <div class="small text-muted">Date</div>
+                                    <div class="small text-muted">Tarikh</div>
                                     <div class="fw-semibold"><?= esc($event['event_date'] ?? '-') ?></div>
-                                    <div class="small text-muted mt-2">Time</div>
+                                    <div class="small text-muted mt-2">Masa</div>
                                     <div class="fw-semibold"><?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?></div>
-                                    <div class="small text-muted mt-2">Venue</div>
+                                    <div class="small text-muted mt-2">Tempat</div>
                                     <div class="fw-semibold"><?= esc($event['venue'] ?? '-') ?></div>
                                 </div>
                             </div>
@@ -79,25 +53,13 @@
                     </div>
                 </div>
 
-                <div class="row g-3 mb-4">
-                    <div class="col-12">
-                        <div class="card shadow border-0 uitm-card">
-                            <div class="card-body p-4">
-                                <div class="text-muted fw-semibold">Registered</div>
-                                <div class="display-6 fw-bold text-primary"><?= esc($registeredCount ?? 0) ?></div>
-                                <div class="small text-muted">Total participants registered for this event.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card shadow border-0">
                     <div class="card-body p-4 p-md-5">
-                        <h3 class="h4 fw-bold mb-3">Participant Information</h3>
+                        <h3 class="h4 fw-bold mb-3">Maklumat Peserta</h3>
 
                         <?php if (isset($validation)): ?>
                             <div class="alert alert-danger" role="alert">
-                                <div class="fw-semibold mb-1">Registration failed.</div>
+                                <div class="fw-semibold mb-1">Pendaftaran tidak berjaya.</div>
                                 <?= $validation->listErrors() ?>
                             </div>
                         <?php endif; ?>
@@ -123,16 +85,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Faculty</label>
-                                    <select name="faculty" class="form-select form-select-lg" required>
-                                        <option value="">Select Faculty</option>
-                                        <?php foreach ($facultyOptions as $faculty): ?>
-                                            <option value="<?= esc($faculty) ?>" <?= $selectedFaculty === $faculty ? 'selected' : '' ?>><?= esc($faculty) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="text" name="faculty" class="form-control form-control-lg" value="<?= esc(old('faculty')) ?>" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Programme <span class="text-muted fw-normal">(Optional)</span></label>
-                                    <input type="text" name="programme" class="form-control form-control-lg" value="<?= esc(old('programme')) ?>">
+                                    <label class="form-label fw-semibold">Programme</label>
+                                    <input type="text" name="programme" class="form-control form-control-lg" value="<?= esc(old('programme')) ?>" required>
                                 </div>
                             </div>
                             <button class="btn btn-primary btn-lg mt-4 w-100" type="submit">Submit Registration</button>

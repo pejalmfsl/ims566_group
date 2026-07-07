@@ -13,15 +13,11 @@ class Attendance extends BaseController
     public function index(int $eventId)
     {
         [$event, $participants, $filters] = $this->getAttendanceData($eventId);
-        $registrationModel = new RegistrationModel();
 
         $this->data['title'] = 'Attendance';
         $this->data['event'] = $event;
         $this->data['participants'] = $participants;
-        $this->data['registered'] = $registrationModel->where('event_id', $eventId)->countAllResults();
-        $this->data['attended'] = (new RegistrationModel())->where('event_id', $eventId)->where('status', 'attended')->countAllResults();
-        $this->data['absent'] = (new RegistrationModel())->where('event_id', $eventId)->where('status', 'absent')->countAllResults();
-        $this->data['filteredTotal'] = count($participants);
+        $this->data['registered'] = count($participants);
         $this->data['filters'] = $filters;
 
         return view('attendance/index', $this->data);
@@ -47,7 +43,7 @@ class Attendance extends BaseController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $filename = 'attendance-' . url_title($event['event_name'] ?? 'event', '-', true) . '.pdf';
+        $filename = 'attendance-' . url_title($event['event_name'] ?? 'aktiviti', '-', true) . '.pdf';
 
         return $this->response
             ->setHeader('Content-Type', 'application/pdf')
@@ -62,7 +58,7 @@ class Attendance extends BaseController
         $event = $eventModel->find($eventId);
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Activity not found.');
+            throw PageNotFoundException::forPageNotFound('Aktiviti tidak dijumpai.');
         }
 
         $filters = [

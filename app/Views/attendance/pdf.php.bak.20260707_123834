@@ -81,7 +81,7 @@
 </head>
 <body>
     <div class="eyebrow">Attendance Report</div>
-    <h1><?= esc($event['event_name'] ?? 'Event') ?></h1>
+    <h1><?= esc($event['event_name'] ?? 'Aktiviti') ?></h1>
 
     <table class="meta">
         <tr>
@@ -128,7 +128,7 @@
             <?php endforeach; ?>
             <?php if (empty($participants ?? [])): ?>
                 <tr>
-                    <td colspan="6" class="empty">No participants have registered for this event yet.</td>
+                    <td colspan="6" class="empty">Belum ada peserta berdaftar untuk aktiviti ini.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

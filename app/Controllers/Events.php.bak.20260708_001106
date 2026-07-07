@@ -152,6 +152,7 @@ class Events extends BaseController
         ]);
 
         $data['title'] = $data['event_name'];
+        $data['max_participant'] = $data['max_participants'];
         $data['registration_deadline'] = $data['registration_close_date'];
 
         return $data;

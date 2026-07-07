@@ -48,6 +48,6 @@ class Users extends BaseController
             'role'     => 'admin',
         ]);
 
-        return redirect()->to(site_url('users'))->with('success', 'User created successfully.');
+        return redirect()->to(site_url('users'))->with('success', 'User berjaya dicipta.');
     }
 }

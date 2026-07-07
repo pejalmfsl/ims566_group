@@ -6,13 +6,13 @@
         <div class="row align-items-center g-4">
             <div class="col-lg-8">
                 <p class="text-warning fw-semibold text-uppercase mb-2">Library Event Registration System</p>
-                <h1 class="display-6 fw-bold mb-2">Administration Dashboard</h1>
-                <p class="lead mb-0">Monitor events, participant registrations, and upcoming activities in one view.</p>
+                <h1 class="display-6 fw-bold mb-2">Dashboard Pentadbiran</h1>
+                <p class="lead mb-0">Pantau aktiviti, pendaftaran peserta dan acara akan datang dalam satu paparan.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
                 <div class="d-flex flex-column flex-sm-row flex-lg-column gap-2 justify-content-lg-end">
-                    <a href="<?= site_url('events/create') ?>" class="btn btn-warning btn-lg">Add Event</a>
-                    <a href="<?= site_url('participants') ?>" class="btn btn-outline-warning btn-lg">View Participants</a>
+                    <a href="<?= site_url('events/create') ?>" class="btn btn-warning btn-lg">Tambah Event</a>
+                    <a href="<?= site_url('participants') ?>" class="btn btn-outline-warning btn-lg">Lihat Peserta</a>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="text-muted fw-semibold">Total Events</div>
                 <div class="display-6 fw-bold text-primary"><?= esc($totalEvents ?? 0) ?></div>
-                <div class="small text-muted">Total events recorded</div>
+                <div class="small text-muted">Jumlah aktiviti direkodkan</div>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <div class="card-body">
                 <div class="text-muted fw-semibold">Total Participants</div>
                 <div class="display-6 fw-bold text-primary"><?= esc($totalParticipants ?? 0) ?></div>
-                <div class="small text-muted">Total participant registrations</div>
+                <div class="small text-muted">Jumlah pendaftaran peserta</div>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
             <div class="card-body">
                 <div class="text-muted fw-semibold">Upcoming Events</div>
                 <div class="display-6 fw-bold text-primary"><?= esc(count($upcomingEvents ?? [])) ?></div>
-                <div class="small text-muted">Upcoming events to monitor</div>
+                <div class="small text-muted">Acara terdekat untuk dipantau</div>
             </div>
         </div>
     </div>

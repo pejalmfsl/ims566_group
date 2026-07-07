@@ -55,7 +55,7 @@ class Events extends BaseController
         $event = $model->find($id);
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Event not found.');
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
         }
 
         $this->data['title'] = 'Event Detail';
@@ -90,7 +90,7 @@ class Events extends BaseController
 
         $model->insert($data);
 
-        return redirect()->to(site_url('events'))->with('success', 'Event saved successfully.');
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya disimpan.');
     }
 
     public function edit(int $id)
@@ -99,7 +99,7 @@ class Events extends BaseController
         $event = $model->find($id);
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Event not found.');
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
         }
 
         $this->data['title'] = 'Edit Event';
@@ -114,7 +114,7 @@ class Events extends BaseController
         $event = $model->find($id);
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Event not found.');
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
         }
 
         if (! $this->validate($this->rules)) {
@@ -127,7 +127,7 @@ class Events extends BaseController
 
         $model->update($id, $this->eventData());
 
-        return redirect()->to(site_url('events'))->with('success', 'Event updated successfully.');
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya dikemaskini.');
     }
 
     public function delete(int $id)
@@ -135,7 +135,7 @@ class Events extends BaseController
         $model = new EventModel();
         $model->delete($id);
 
-        return redirect()->to(site_url('events'))->with('success', 'Event deleted successfully.');
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya dipadam.');
     }
 
     private function eventData(): array
@@ -152,6 +152,7 @@ class Events extends BaseController
         ]);
 
         $data['title'] = $data['event_name'];
+        $data['max_participant'] = $data['max_participants'];
         $data['registration_deadline'] = $data['registration_close_date'];
 
         return $data;

@@ -23,8 +23,8 @@ $statusClasses = [
         <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
             <div>
                 <p class="text-warning fw-semibold text-uppercase mb-2">Registration List</p>
-                <h1 class="h2 fw-bold mb-2"><?= esc($event['event_name'] ?? 'Event') ?></h1>
-                <p class="mb-0"><?= esc($event['event_date'] ?? '-') ?> | <?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?> | <?= esc($event['venue'] ?? '-') ?></p>
+                <h1 class="h2 fw-bold mb-2"><?= esc($event['event_name'] ?? 'Aktiviti') ?></h1>
+                <p class="mb-0"><?= esc($event['event_date'] ?? '-') ?> · <?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?> · <?= esc($event['venue'] ?? '-') ?></p>
             </div>
             <div class="align-self-md-center d-flex flex-wrap gap-2">
                 <a href="<?= site_url('events/' . $event['id']) ?>" class="btn btn-outline-warning">Event Detail</a>
@@ -60,30 +60,12 @@ $statusClasses = [
 </div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="card shadow-sm border-0 uitm-card">
             <div class="card-body">
-                <div class="text-muted fw-semibold">Registered</div>
+                <div class="text-muted fw-semibold">Total Participants</div>
                 <div class="display-6 fw-bold text-primary"><?= esc($registered ?? 0) ?></div>
-                <div class="small text-muted">Total participants registered for this event.</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 uitm-card">
-            <div class="card-body">
-                <div class="text-muted fw-semibold">Attended</div>
-                <div class="display-6 fw-bold text-success"><?= esc($attended ?? 0) ?></div>
-                <div class="small text-muted">Participants marked as present.</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 uitm-card">
-            <div class="card-body">
-                <div class="text-muted fw-semibold">Absent</div>
-                <div class="display-6 fw-bold text-warning"><?= esc($absent ?? 0) ?></div>
-                <div class="small text-muted">Participants marked as absent.</div>
+                <div class="small text-muted">Jumlah peserta mengikut carian semasa.</div>
             </div>
         </div>
     </div>
@@ -91,8 +73,8 @@ $statusClasses = [
 
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white border-warning d-flex justify-content-between align-items-center">
-        <span class="fw-bold text-primary">Participants for This Event</span>
-        <span class="badge text-bg-light border"><?= esc($filteredTotal ?? count($participants ?? [])) ?> participants</span>
+        <span class="fw-bold text-primary">Senarai Peserta Aktiviti Ini</span>
+        <span class="badge text-bg-light border"><?= esc(count($participants ?? [])) ?> peserta</span>
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -129,14 +111,14 @@ $statusClasses = [
                                 <button class="btn btn-sm btn-outline-warning" type="submit">Absent</button>
                             </form>
                             <a class="btn btn-sm btn-outline-primary" href="<?= site_url('participants/' . $participant['id'] . '/edit') ?>">Edit</a>
-                            <a class="btn btn-sm btn-outline-danger" href="<?= site_url('participants/' . $participant['id'] . '/delete') ?>" onclick="return confirm('Delete this participant?')">Delete</a>
+                            <a class="btn btn-sm btn-outline-danger" href="<?= site_url('participants/' . $participant['id'] . '/delete') ?>" onclick="return confirm('Padam peserta ini?')">Delete</a>
                         </div>
                     </td>
                 </tr>
             <?php endforeach; ?>
             <?php if (empty($participants ?? [])): ?>
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-5">No participants match the current search.</td>
+                    <td colspan="6" class="text-center text-muted py-5">Tiada peserta sepadan dengan carian.</td>
                 </tr>
             <?php endif; ?>
             </tbody>

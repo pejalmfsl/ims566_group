@@ -14,7 +14,7 @@ class Participants extends BaseController
         'email' => 'required|valid_email|max_length[150]',
         'phone_number' => 'required|max_length[30]',
         'faculty' => 'required|max_length[100]',
-        'programme' => 'permit_empty|max_length[100]',
+        'programme' => 'required|max_length[100]',
         'status' => 'required|in_list[registered,approved,rejected,attended,absent]',
     ];
 
@@ -93,7 +93,7 @@ class Participants extends BaseController
 
         return redirect()
             ->to(site_url('attendance/' . $participant['event_id']))
-            ->with('success', 'Participant information updated successfully.');
+            ->with('success', 'Maklumat peserta berjaya dikemaskini.');
     }
 
     public function updateAttendance(int $id)
@@ -104,7 +104,7 @@ class Participants extends BaseController
         if (! in_array($status, ['attended', 'absent'], true)) {
             return redirect()
                 ->to(site_url('attendance/' . $participant['event_id']))
-                ->with('error', 'Invalid attendance status.');
+                ->with('error', 'Status kehadiran tidak sah.');
         }
 
         $registrationModel = new RegistrationModel();
@@ -115,7 +115,7 @@ class Participants extends BaseController
 
         return redirect()
             ->to(site_url('attendance/' . $participant['event_id']))
-            ->with('success', 'Participant attendance status updated successfully.');
+            ->with('success', 'Status kehadiran peserta berjaya dikemaskini.');
     }
 
     public function delete(int $id)
@@ -127,7 +127,7 @@ class Participants extends BaseController
 
         return redirect()
             ->to(site_url('attendance/' . $participant['event_id']))
-            ->with('success', 'Participant deleted successfully.');
+            ->with('success', 'Peserta berjaya dipadam.');
     }
 
     private function participantData(): array
@@ -144,7 +144,7 @@ class Participants extends BaseController
             'email' => $this->request->getPost('email'),
             'phone_number' => $this->request->getPost('phone_number'),
             'faculty' => $this->request->getPost('faculty'),
-            'programme' => (string) $this->request->getPost('programme'),
+            'programme' => $this->request->getPost('programme'),
             'status' => $status,
             'attendance_status' => $this->attendanceLabel($status),
         ];
@@ -167,13 +167,13 @@ class Participants extends BaseController
         $participant = $registrationModel->find($id);
 
         if (! $participant) {
-            throw PageNotFoundException::forPageNotFound('Participant not found.');
+            throw PageNotFoundException::forPageNotFound('Peserta tidak dijumpai.');
         }
 
         $event = $eventModel->find($participant['event_id']);
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Participant event not found.');
+            throw PageNotFoundException::forPageNotFound('Event peserta tidak dijumpai.');
         }
 
         return [$participant, $event];

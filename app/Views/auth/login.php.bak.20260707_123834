@@ -16,14 +16,14 @@
                         <img src="<?= base_url('/public/uitm-logo.svg') ?>" alt="Logo UiTM" class="img-fluid uitm-logo-sm bg-white rounded-4 shadow-sm p-3 mb-3">
                     </a>
                     <p class="text-warning fw-semibold text-uppercase mb-1">Universiti Teknologi MARA</p>
-                    <h1 class="h2 fw-bold mb-0">LIBRARY EVENT<br>REGISTRATION SYSTEM (LERS)</h1>
+                    <h1 class="h2 fw-bold mb-0">LERS Login</h1>
                 </div>
 
                 <div class="card shadow border-0 uitm-card">
                     <div class="card-body p-4 p-md-5">
                         <div class="text-center mb-4">
-                            <h2 class="h4 mb-1 text-primary fw-bold">LOGIN</h2>
-                            <!-- <p class="text-muted mb-0">Library Event Registration System</p> -->
+                            <h2 class="h4 mb-1 text-primary fw-bold">Log Masuk Sistem</h2>
+                            <p class="text-muted mb-0">Library Event Registration System</p>
                         </div>
 
                         <?php if (session()->getFlashdata('success')): ?>
@@ -42,7 +42,7 @@
 
                         <?php if (isset($validation)): ?>
                             <div class="alert alert-danger" role="alert">
-                                <div class="fw-semibold mb-1">Login failed.</div>
+                                <div class="fw-semibold mb-1">Login tidak berjaya.</div>
                                 <?= $validation->listErrors() ?>
                             </div>
                         <?php endif; ?>
@@ -61,7 +61,7 @@
                         </form>
 
                         <div class="text-center mt-4">
-                            <a href="<?= site_url('/') ?>" class="link-secondary text-decoration-none">Back to landing page</a>
+                            <a href="<?= site_url('/') ?>" class="link-secondary text-decoration-none">Kembali ke landing page</a>
                         </div>
                     </div>
                 </div>

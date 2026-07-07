@@ -6,8 +6,8 @@
         <div class="row align-items-center g-3">
             <div class="col-lg-8">
                 <p class="text-warning fw-semibold text-uppercase mb-2">User Management</p>
-                <h1 class="h2 fw-bold mb-2">Manage System Accounts</h1>
-                <p class="mb-0">Add and monitor admin accounts that can manage LERS events.</p>
+                <h1 class="h2 fw-bold mb-2">Urus Akaun Sistem</h1>
+                <p class="mb-0">Tambah dan pantau akaun admin yang boleh mengurus event LERS.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
                 <a href="<?= site_url('users/create') ?>" class="btn btn-warning btn-lg">Create User</a>
@@ -18,8 +18,8 @@
 
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white border-warning d-flex justify-content-between align-items-center">
-        <span class="fw-bold text-primary">User List</span>
-        <span class="badge text-bg-light border"><?= esc(count($users ?? [])) ?> records</span>
+        <span class="fw-bold text-primary">Senarai User</span>
+        <span class="badge text-bg-light border"><?= esc(count($users ?? [])) ?> rekod</span>
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
@@ -42,7 +42,7 @@
             <?php endforeach; ?>
             <?php if (empty($users ?? [])): ?>
                 <tr>
-                    <td colspan="4" class="text-center text-muted py-5">No users recorded.</td>
+                    <td colspan="4" class="text-center text-muted py-5">Tiada user direkodkan.</td>
                 </tr>
             <?php endif; ?>
             </tbody>

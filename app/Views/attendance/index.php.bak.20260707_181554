@@ -60,30 +60,12 @@ $statusClasses = [
 </div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="card shadow-sm border-0 uitm-card">
             <div class="card-body">
                 <div class="text-muted fw-semibold">Registered</div>
                 <div class="display-6 fw-bold text-primary"><?= esc($registered ?? 0) ?></div>
                 <div class="small text-muted">Total participants registered for this event.</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 uitm-card">
-            <div class="card-body">
-                <div class="text-muted fw-semibold">Attended</div>
-                <div class="display-6 fw-bold text-success"><?= esc($attended ?? 0) ?></div>
-                <div class="small text-muted">Participants marked as present.</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm border-0 uitm-card">
-            <div class="card-body">
-                <div class="text-muted fw-semibold">Absent</div>
-                <div class="display-6 fw-bold text-warning"><?= esc($absent ?? 0) ?></div>
-                <div class="small text-muted">Participants marked as absent.</div>
             </div>
         </div>
     </div>

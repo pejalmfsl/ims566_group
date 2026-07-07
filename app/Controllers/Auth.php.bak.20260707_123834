@@ -28,7 +28,7 @@ class Auth extends BaseController
             $user = $userModel->where('username', $this->request->getPost('username'))->first();
 
             if (! $user || ! password_verify((string) $this->request->getPost('password'), $user['password'])) {
-                return redirect()->back()->withInput()->with('error', 'Login failed. Invalid username or password.');
+                return redirect()->back()->withInput()->with('error', 'Login tidak berjaya. Username atau password tidak sah.');
             }
 
             session()->set([
@@ -39,7 +39,7 @@ class Auth extends BaseController
                 'role'       => $user['role'],
             ]);
 
-            return redirect()->to(site_url('dashboard'))->with('success', 'Login successful. Welcome, ' . $user['name'] . '.');
+            return redirect()->to(site_url('dashboard'))->with('success', 'Login berjaya. Selamat datang, ' . $user['name'] . '.');
         }
 
         return view('auth/login', $this->data);
@@ -49,6 +49,6 @@ class Auth extends BaseController
     {
         session()->destroy();
 
-        return redirect()->to(site_url('login'))->with('success', 'Logout successful.');
+        return redirect()->to(site_url('login'))->with('success', 'Logout berjaya.');
     }
 }

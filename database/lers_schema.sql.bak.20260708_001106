@@ -23,6 +23,7 @@ CREATE TABLE events (
     event_time TIME NOT NULL,
     max_participants INT UNSIGNED NOT NULL DEFAULT 0,
     registration_close_date DATE NULL,
+    max_participant INT UNSIGNED NOT NULL DEFAULT 50,
     registration_deadline DATE NULL,
     status ENUM('draft','open','closed') NOT NULL DEFAULT 'draft',
     created_at DATETIME NULL,

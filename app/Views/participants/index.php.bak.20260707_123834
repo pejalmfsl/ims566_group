@@ -7,8 +7,8 @@
         <div class="row align-items-center g-3">
             <div class="col-lg-8">
                 <p class="text-warning fw-semibold text-uppercase mb-2">Participants</p>
-                <h1 class="h2 fw-bold mb-2">Registration List by Event</h1>
-                <p class="mb-0">Each participant who registers is listed under the selected event.</p>
+                <h1 class="h2 fw-bold mb-2">Senarai Pendaftaran Mengikut Aktiviti</h1>
+                <p class="mb-0">Setiap peserta yang berjaya daftar dikira sebagai hadir untuk aktiviti tersebut.</p>
             </div>
         </div>
     </div>
@@ -50,14 +50,14 @@
 
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white border-warning d-flex justify-content-between align-items-center">
-        <span class="fw-bold text-primary">Events</span>
-        <span class="badge text-bg-light border"><?= esc(count($summary ?? [])) ?> events</span>
+        <span class="fw-bold text-primary">Aktiviti</span>
+        <span class="badge text-bg-light border"><?= esc(count($summary ?? [])) ?> aktiviti</span>
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
             <tr>
-                <th>Event</th>
+                <th>Aktiviti</th>
                 <th>Date</th>
                 <th>Registered / Attended</th>
                 <th class="text-end">Action</th>
@@ -83,7 +83,7 @@
             <?php endforeach; ?>
             <?php if (empty($summary ?? [])): ?>
                 <tr>
-                    <td colspan="4" class="text-center text-muted py-5">No events match the current search.</td>
+                    <td colspan="4" class="text-center text-muted py-5">Tiada aktiviti sepadan dengan carian.</td>
                 </tr>
             <?php endif; ?>
             </tbody>

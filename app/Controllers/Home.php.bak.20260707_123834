@@ -7,7 +7,7 @@ class Home extends BaseController
     public function index()
     {
         return view('home/welcome', [
-            'title' => 'Welcome to LERS',
+            'title' => 'Selamat Datang ke LERS',
         ]);
     }
 }

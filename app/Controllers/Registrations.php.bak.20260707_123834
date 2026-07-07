@@ -14,7 +14,7 @@ class Registrations extends BaseController
         'email' => 'required|valid_email|max_length[150]',
         'phone_number' => 'required|max_length[30]',
         'faculty' => 'required|max_length[100]',
-        'programme' => 'permit_empty|max_length[100]',
+        'programme' => 'required|max_length[100]',
     ];
 
     public function create(string $token)
@@ -44,11 +44,11 @@ class Registrations extends BaseController
         }
 
         if (! in_array(strtolower((string) ($event['status'] ?? '')), ['open', 'active'], true)) {
-            return redirect()->to(site_url('register/' . $token))->with('error', 'Registration for this event is not open or has been closed.');
+            return redirect()->to(site_url('register/' . $token))->with('error', 'Pendaftaran untuk event ini belum dibuka atau telah ditutup.');
         }
 
         if (! empty($event['registration_close_date']) && date('Y-m-d') > $event['registration_close_date']) {
-            return redirect()->to(site_url('register/' . $token))->with('error', 'The registration closing date has passed.');
+            return redirect()->to(site_url('register/' . $token))->with('error', 'Tarikh tutup pendaftaran telah tamat.');
         }
 
         $registrationModel = new RegistrationModel();
@@ -64,12 +64,12 @@ class Registrations extends BaseController
             'email' => $this->request->getPost('email'),
             'phone_number' => $this->request->getPost('phone_number'),
             'faculty' => $this->request->getPost('faculty'),
-            'programme' => (string) $this->request->getPost('programme'),
+            'programme' => $this->request->getPost('programme'),
             'status' => 'registered',
             'register_date' => date('Y-m-d H:i:s'),
         ]);
 
-        return redirect()->to(site_url('register/' . $token))->with('success', 'Registration submitted successfully.');
+        return redirect()->to(site_url('register/' . $token))->with('success', 'Pendaftaran berjaya dihantar.');
     }
 
     private function registeredCount(int $eventId): int
@@ -85,7 +85,7 @@ class Registrations extends BaseController
         $event = $eventModel->where('registration_token', $token)->first();
 
         if (! $event) {
-            throw PageNotFoundException::forPageNotFound('Registration URL does not exist. Please check the registration link.');
+            throw PageNotFoundException::forPageNotFound('Registration URL tidak wujud. Sila semak semula link pendaftaran.');
         }
 
         return $event;
