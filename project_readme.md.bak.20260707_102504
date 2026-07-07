@@ -1,0 +1,423 @@
+# Library Event Registration System (LERS)
+
+## IMS566 – Advanced Web Design Development and Content Management
+
+### Group Project
+
+---
+
+# Project Overview
+
+Library Event Registration System (LERS) is a web-based application developed to manage library events and participant registrations digitally. The system replaces manual registration forms with an online platform that allows administrators to manage events while participants can register easily through a responsive web interface.
+
+The system is developed as part of the IMS566 Group Assignment.
+
+---
+
+# Objectives
+
+* Digitalise library event registration process.
+* Manage library events efficiently.
+* Allow users to register online.
+* Record participant attendance.
+* Generate participant reports.
+* Demonstrate CRUD implementation using CodeIgniter Framework.
+
+---
+
+# Development Platform
+
+| Item                 | Technology         |
+| -------------------- | ------------------ |
+| Framework            | CodeIgniter 4      |
+| Programming Language | PHP 8.1+           |
+| Database             | MySQL              |
+| Frontend             | Bootstrap 5        |
+| Icons                | Bootstrap Icons    |
+| JavaScript           | Vanilla JavaScript |
+| PDF Export           | DomPDF             |
+| Local Server         | XAMPP / Laragon    |
+
+---
+
+# Development Guidelines
+
+The project will follow the following principles:
+
+## 1. Simple Code
+
+* Keep the code simple.
+* Avoid unnecessary complexity.
+* Easy for lecturers to understand.
+* Suitable for beginner/intermediate developers.
+
+---
+
+## 2. Well Commented
+
+Every important section should contain comments.
+
+Example
+
+```php
+// Retrieve event information
+$event = $eventModel->find($id);
+
+// Check whether event exists
+if (!$event) {
+    return redirect()->back();
+}
+```
+
+---
+
+## 3. Bootstrap First
+
+The system should rely heavily on Bootstrap components.
+
+Avoid writing custom CSS unless absolutely necessary.
+
+Use Bootstrap components such as:
+
+* Navbar
+* Cards
+* Tables
+* Forms
+* Buttons
+* Alerts
+* Modal
+* Offcanvas
+* Accordion
+* Pagination
+* Badges
+* Breadcrumb
+
+---
+
+## 4. Responsive Design
+
+The system must work properly on:
+
+* Desktop
+* Laptop
+* Tablet
+* Mobile Phone
+
+Bootstrap Grid System should be used throughout the project.
+
+Avoid fixed width layouts.
+
+---
+
+## 5. Consistent UI
+
+Use Bootstrap default theme.
+
+Recommended colors:
+
+* Primary
+* Secondary
+* Success
+* Warning
+* Danger
+
+Avoid excessive styling.
+
+---
+
+# User Roles
+
+## Administrator
+
+Administrator can:
+
+* Login
+* Manage Events
+* Register Events
+* Edit Events
+* Delete Events
+* View Participants
+* Search Participants
+* Export PDF
+* Record Attendance
+* View Dashboard
+
+---
+
+## Participant
+
+Participant can:
+
+* View Available Events
+* Register Event
+* View Registration Status
+
+---
+
+# System Modules
+
+## Module 1
+
+Login
+
+Features
+
+* Login
+* Logout
+* Session Authentication
+
+---
+
+## Module 2
+
+Dashboard
+
+Display
+
+* Total Events
+* Total Participants
+* Upcoming Events
+* Recent Registrations
+
+---
+
+## Module 3
+
+Event Management
+
+CRUD
+
+* Create Event
+* View Event
+* Update Event
+* Delete Event
+
+Event Information
+
+* Event Name
+* Description
+* Venue
+* Date
+* Time
+* Maximum Participants
+* Registration Closing Date
+* Status
+
+---
+
+## Module 4
+
+Participant Registration
+
+Information
+
+* Full Name
+* Student/Staff ID
+* Email
+* Phone Number
+* Faculty
+* Programme
+
+Functions
+
+* Register
+* Cancel Registration
+
+---
+
+## Module 5
+
+Attendance
+
+Administrator can
+
+* Mark Present
+* Mark Absent
+* Search Attendance
+
+---
+
+## Module 6
+
+Reports
+
+Generate
+
+* Participant List
+* Attendance Report
+
+Export
+
+* PDF
+
+---
+
+# Database
+
+Main Tables
+
+## users
+
+* id
+* fullname
+* email
+* password
+* role
+* created_at
+
+---
+
+## events
+
+* id
+* title
+* description
+* venue
+* event_date
+* event_time
+* max_participant
+* registration_deadline
+* status
+
+---
+
+## registrations
+
+* id
+* event_id
+* user_id
+* register_date
+* attendance_status
+
+---
+
+# Folder Structure
+
+```
+app/
+
+Controllers/
+
+Models/
+
+Views/
+
+Config/
+
+Filters/
+
+Public/
+
+Writable/
+```
+
+---
+
+# Coding Standard
+
+* MVC Architecture
+* One Controller for each module
+* One Model for each table
+* Separate View files
+* Proper indentation
+* Use meaningful variable names
+* Add comments where necessary
+
+---
+
+# Validation
+
+All forms should validate:
+
+* Required fields
+* Email format
+* Duplicate registration
+* Maximum participant limit
+
+---
+
+# Security
+
+Basic security implementation:
+
+* Session Authentication
+* CSRF Protection
+* Input Validation
+* SQL Injection Protection using Query Builder
+* Password Hashing
+
+---
+
+# Search Functions
+
+Search by
+
+* Event Name
+* Participant Name
+* Student ID
+* Faculty
+
+---
+
+# PDF Export
+
+Generate PDF for
+
+* Event Participant List
+* Attendance Report
+
+---
+
+# Navigation
+
+Main Menu
+
+* Dashboard
+* Events
+* Registration
+* Attendance
+* Reports
+* Profile
+* Logout
+
+---
+
+# Future Enhancements
+
+Possible future improvements:
+
+* QR Code Attendance
+* Email Notification
+* Certificate Generation
+* Event Poster Upload
+* Event Categories
+* Multi-role Users
+* Analytics Dashboard
+
+---
+
+# Project Development Philosophy
+
+This project is intentionally developed with simplicity in mind.
+
+The focus is to:
+
+* Produce readable code.
+* Follow MVC architecture.
+* Use Bootstrap components.
+* Minimise custom CSS.
+* Maintain responsive layouts.
+* Provide sufficient code comments.
+* Meet all IMS566 project requirements.
+
+---
+
+# Author
+
+IMS566 Group Assignment
+
+Faculty of Information Management
+
+Universiti Teknologi MARA (UiTM)
+
+2026

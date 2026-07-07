@@ -1,0 +1,181 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\EventModel;
+use App\Models\RegistrationModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
+
+class Participants extends BaseController
+{
+    private array $rules = [
+        'full_name' => 'required|min_length[3]|max_length[150]',
+        'student_staff_id' => 'required|max_length[50]',
+        'email' => 'required|valid_email|max_length[150]',
+        'phone_number' => 'required|max_length[30]',
+        'faculty' => 'required|max_length[100]',
+        'programme' => 'required|max_length[100]',
+        'status' => 'required|in_list[registered,approved,rejected,attended,absent]',
+    ];
+
+    public function index()
+    {
+        $eventModel = new EventModel();
+        $registrationModel = new RegistrationModel();
+        $keyword = trim((string) $this->request->getGet('q'));
+
+        if ($keyword !== '') {
+            $eventModel->groupStart()
+                ->like('event_name', $keyword)
+                ->orLike('venue', $keyword)
+                ->orLike('description', $keyword)
+                ->groupEnd();
+        }
+
+        $events = $eventModel->orderBy('event_date', 'DESC')->findAll();
+        $summary = [];
+
+        foreach ($events as $event) {
+            $registered = $registrationModel->where('event_id', $event['id'])->countAllResults();
+
+            $summary[] = [
+                'event' => $event,
+                'registered' => $registered,
+            ];
+        }
+
+        $this->data['title'] = 'Participants';
+        $this->data['summary'] = $summary;
+        $this->data['totalEvents'] = count($events);
+        $this->data['totalRegistered'] = array_sum(array_column($summary, 'registered'));
+        $this->data['filters'] = ['q' => $keyword];
+
+        return view('participants/index', $this->data);
+    }
+
+    public function show(int $id)
+    {
+        [$participant, $event] = $this->findParticipantWithEvent($id);
+
+        $this->data['title'] = 'Participant Detail';
+        $this->data['participant'] = $participant;
+        $this->data['event'] = $event;
+
+        return view('participants/show', $this->data);
+    }
+
+    public function edit(int $id)
+    {
+        [$participant, $event] = $this->findParticipantWithEvent($id);
+
+        $this->data['title'] = 'Edit Participant';
+        $this->data['participant'] = $participant;
+        $this->data['event'] = $event;
+
+        return view('participants/form', $this->data);
+    }
+
+    public function update(int $id)
+    {
+        [$participant, $event] = $this->findParticipantWithEvent($id);
+
+        if (! $this->validate($this->rules)) {
+            $this->data['title'] = 'Edit Participant';
+            $this->data['participant'] = array_merge($participant, $this->participantData());
+            $this->data['event'] = $event;
+            $this->data['validation'] = $this->validator;
+
+            return view('participants/form', $this->data);
+        }
+
+        $registrationModel = new RegistrationModel();
+        $registrationModel->update($id, $this->participantData());
+
+        return redirect()
+            ->to(site_url('attendance/' . $participant['event_id']))
+            ->with('success', 'Maklumat peserta berjaya dikemaskini.');
+    }
+
+    public function updateAttendance(int $id)
+    {
+        [$participant] = $this->findParticipantWithEvent($id);
+        $status = (string) $this->request->getPost('status');
+
+        if (! in_array($status, ['attended', 'absent'], true)) {
+            return redirect()
+                ->to(site_url('attendance/' . $participant['event_id']))
+                ->with('error', 'Status kehadiran tidak sah.');
+        }
+
+        $registrationModel = new RegistrationModel();
+        $registrationModel->update($id, [
+            'status' => $status,
+            'attendance_status' => $status === 'attended' ? 'Present' : 'Absent',
+        ]);
+
+        return redirect()
+            ->to(site_url('attendance/' . $participant['event_id']))
+            ->with('success', 'Status kehadiran peserta berjaya dikemaskini.');
+    }
+
+    public function delete(int $id)
+    {
+        [$participant] = $this->findParticipantWithEvent($id);
+
+        $registrationModel = new RegistrationModel();
+        $registrationModel->delete($id);
+
+        return redirect()
+            ->to(site_url('attendance/' . $participant['event_id']))
+            ->with('success', 'Peserta berjaya dipadam.');
+    }
+
+    private function participantData(): array
+    {
+        $fullName = (string) $this->request->getPost('full_name');
+        $studentStaffId = (string) $this->request->getPost('student_staff_id');
+        $status = (string) $this->request->getPost('status');
+
+        return [
+            'full_name' => $fullName,
+            'fullname' => $fullName,
+            'student_staff_id' => $studentStaffId,
+            'student_id' => $studentStaffId,
+            'email' => $this->request->getPost('email'),
+            'phone_number' => $this->request->getPost('phone_number'),
+            'faculty' => $this->request->getPost('faculty'),
+            'programme' => $this->request->getPost('programme'),
+            'status' => $status,
+            'attendance_status' => $this->attendanceLabel($status),
+        ];
+    }
+
+    private function attendanceLabel(string $status): string
+    {
+        return match ($status) {
+            'attended' => 'Present',
+            'absent' => 'Absent',
+            default => 'Pending',
+        };
+    }
+
+    private function findParticipantWithEvent(int $id): array
+    {
+        $registrationModel = new RegistrationModel();
+        $eventModel = new EventModel();
+
+        $participant = $registrationModel->find($id);
+
+        if (! $participant) {
+            throw PageNotFoundException::forPageNotFound('Peserta tidak dijumpai.');
+        }
+
+        $event = $eventModel->find($participant['event_id']);
+
+        if (! $event) {
+            throw PageNotFoundException::forPageNotFound('Event peserta tidak dijumpai.');
+        }
+
+        return [$participant, $event];
+    }
+}

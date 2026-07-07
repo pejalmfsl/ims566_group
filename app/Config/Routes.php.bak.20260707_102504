@@ -1,0 +1,34 @@
+<?php
+
+use CodeIgniter\Router\RouteCollection;
+
+/** @var RouteCollection $routes */
+$routes->get('/', 'Home::index');
+
+$routes->get('login', 'Auth::login');
+$routes->post('login', 'Auth::login');
+$routes->get('logout', 'Auth::logout');
+
+$routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
+
+$routes->get('users', 'Users::index', ['filter' => 'auth:superadmin']);
+$routes->get('users/create', 'Users::create', ['filter' => 'auth:superadmin']);
+$routes->post('users', 'Users::store', ['filter' => 'auth:superadmin']);
+
+$routes->get('events', 'Events::index', ['filter' => 'auth:admin,superadmin']);
+$routes->get('events/create', 'Events::create', ['filter' => 'auth:admin,superadmin']);
+$routes->post('events', 'Events::store', ['filter' => 'auth:admin,superadmin']);
+$routes->get('events/(:num)/edit', 'Events::edit/$1', ['filter' => 'auth:admin,superadmin']);
+$routes->post('events/(:num)', 'Events::update/$1', ['filter' => 'auth:admin,superadmin']);
+$routes->get('events/(:num)/delete', 'Events::delete/$1', ['filter' => 'auth:admin,superadmin']);
+
+$routes->get('participants', 'Participants::index', ['filter' => 'auth:admin,superadmin']);
+$routes->get('participants/(:num)/edit', 'Participants::edit/$1', ['filter' => 'auth:admin,superadmin']);
+$routes->post('participants/(:num)', 'Participants::update/$1', ['filter' => 'auth:admin,superadmin']);
+$routes->get('participants/(:num)/delete', 'Participants::delete/$1', ['filter' => 'auth:admin,superadmin']);
+
+$routes->get('attendance/(:num)', 'Attendance::index/$1', ['filter' => 'auth:admin,superadmin']);
+$routes->get('attendance/(:num)/export-pdf', 'Attendance::exportPdf/$1', ['filter' => 'auth:admin,superadmin']);
+
+$routes->get('register/(:segment)', 'Registrations::create/$1');
+$routes->post('register/(:segment)', 'Registrations::store/$1');

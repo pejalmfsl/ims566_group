@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Attendance Report</title>
+    <style>
+        @page {
+            margin: 28px 30px;
+        }
+        body {
+            color: #222;
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        h1 {
+            color: #123c69;
+            font-size: 20px;
+            margin: 0 0 6px;
+        }
+        .eyebrow {
+            color: #8a6d00;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: .5px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .meta,
+        .summary {
+            border: 1px solid #d9dee7;
+            border-collapse: collapse;
+            margin-top: 14px;
+            width: 100%;
+        }
+        .meta td,
+        .summary td {
+            border: 1px solid #d9dee7;
+            padding: 7px 8px;
+            vertical-align: top;
+        }
+        .label {
+            background: #f4f6f9;
+            color: #4d5b6a;
+            font-weight: bold;
+            width: 24%;
+        }
+        .count {
+            color: #123c69;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        table.list {
+            border-collapse: collapse;
+            margin-top: 18px;
+            width: 100%;
+        }
+        .list th,
+        .list td {
+            border: 1px solid #d9dee7;
+            padding: 7px 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .list th {
+            background: #123c69;
+            color: #fff;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .empty {
+            color: #6c757d;
+            padding: 24px 0;
+            text-align: center;
+        }
+        .footer {
+            color: #6c757d;
+            font-size: 9px;
+            margin-top: 18px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="eyebrow">Attendance Report</div>
+    <h1><?= esc($event['event_name'] ?? 'Aktiviti') ?></h1>
+
+    <table class="meta">
+        <tr>
+            <td class="label">Date</td>
+            <td><?= esc($event['event_date'] ?? '-') ?></td>
+            <td class="label">Time</td>
+            <td><?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5) ?: '-') ?></td>
+        </tr>
+        <tr>
+            <td class="label">Venue</td>
+            <td colspan="3"><?= esc($event['venue'] ?? '-') ?></td>
+        </tr>
+    </table>
+
+    <table class="summary">
+        <tr>
+            <td class="label">Total Registered / Attended</td>
+            <td><span class="count"><?= esc($registered ?? 0) ?></span></td>
+        </tr>
+    </table>
+
+    <table class="list">
+        <thead>
+            <tr>
+                <th style="width: 5%;">No.</th>
+                <th style="width: 24%;">Name</th>
+                <th style="width: 15%;">ID</th>
+                <th style="width: 24%;">Email</th>
+                <th style="width: 20%;">Faculty</th>
+                <th style="width: 12%;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach (($participants ?? []) as $index => $participant): ?>
+                <tr>
+                    <td><?= esc($index + 1) ?></td>
+                    <td><?= esc($participant['full_name'] ?? '-') ?></td>
+                    <td><?= esc($participant['student_staff_id'] ?? '-') ?></td>
+                    <td><?= esc($participant['email'] ?? '-') ?></td>
+                    <td><?= esc($participant['faculty'] ?? '-') ?></td>
+                    <td>Attended</td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($participants ?? [])): ?>
+                <tr>
+                    <td colspan="6" class="empty">Belum ada peserta berdaftar untuk aktiviti ini.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <div class="footer">Generated at <?= esc($generatedAt ?? date('d/m/Y h:i A')) ?></div>
+</body>
+</html>

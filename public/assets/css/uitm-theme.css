@@ -1,0 +1,88 @@
+:root {
+    --uitm-blue: #002e6e;
+    --uitm-purple: #8c3392;
+    --uitm-gold: #febe10;
+    --bs-primary: var(--uitm-purple);
+    --bs-primary-rgb: 140, 51, 146;
+    --bs-warning: var(--uitm-gold);
+    --bs-warning-rgb: 254, 190, 16;
+    --bs-link-color: var(--uitm-purple);
+    --bs-link-hover-color: var(--uitm-blue);
+}
+
+body.uitm-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--uitm-blue), var(--uitm-purple));
+}
+
+.bg-primary,
+.btn-primary {
+    background-color: var(--uitm-purple) !important;
+}
+
+.border-primary,
+.btn-primary {
+    border-color: var(--uitm-purple) !important;
+}
+
+.text-primary {
+    color: var(--uitm-purple) !important;
+}
+
+.bg-warning,
+.btn-warning {
+    background-color: var(--uitm-gold) !important;
+}
+
+.border-warning,
+.btn-warning,
+.btn-outline-warning {
+    border-color: var(--uitm-gold) !important;
+}
+
+.text-warning {
+    color: var(--uitm-gold) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--uitm-blue) !important;
+    border-color: var(--uitm-blue) !important;
+}
+
+.btn-warning,
+.btn-warning:hover,
+.btn-warning:focus {
+    color: var(--uitm-blue) !important;
+}
+
+.btn-outline-warning {
+    color: var(--uitm-gold) !important;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-warning:focus {
+    color: var(--uitm-blue) !important;
+    background-color: var(--uitm-gold) !important;
+}
+
+.uitm-logo {
+    max-width: 220px;
+    width: 60%;
+    height: auto;
+}
+
+.uitm-logo-sm {
+    max-width: 180px;
+    width: 55%;
+    height: auto;
+}
+
+.uitm-card {
+    border-top: 0.35rem solid var(--uitm-gold) !important;
+}
+
+
+.event-description {
+    max-width: 320px;
+}

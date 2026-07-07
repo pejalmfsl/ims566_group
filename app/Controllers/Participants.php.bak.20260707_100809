@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\EventModel;
+use App\Models\RegistrationModel;
+
+class Participants extends BaseController
+{
+    public function index()
+    {
+        $eventModel = new EventModel();
+        $registrationModel = new RegistrationModel();
+
+        $events = $eventModel->orderBy('event_date', 'DESC')->findAll();
+        $summary = [];
+
+        foreach ($events as $event) {
+            $registered = $registrationModel->where('event_id', $event['id'])->countAllResults();
+
+            $summary[] = [
+                'event' => $event,
+                'registered' => $registered,
+            ];
+        }
+
+        $this->data['title'] = 'Participants';
+        $this->data['summary'] = $summary;
+        $this->data['totalEvents'] = count($events);
+        $this->data['totalRegistered'] = array_sum(array_column($summary, 'registered'));
+
+        return view('participants/index', $this->data);
+    }
+}

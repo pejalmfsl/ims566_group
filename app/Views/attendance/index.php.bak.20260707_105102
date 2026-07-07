@@ -1,0 +1,126 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+<?php
+$filters = $filters ?? ['q' => '', 'status' => ''];
+$statusOptions = [
+    'registered' => 'Registered',
+    'approved' => 'Approved',
+    'rejected' => 'Rejected',
+    'attended' => 'Attended',
+    'absent' => 'Absent',
+];
+$statusClasses = [
+    'registered' => 'text-bg-secondary',
+    'approved' => 'text-bg-info',
+    'rejected' => 'text-bg-danger',
+    'attended' => 'text-bg-success',
+    'absent' => 'text-bg-warning',
+];
+?>
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4 bg-primary text-white">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+            <div>
+                <p class="text-warning fw-semibold text-uppercase mb-2">Registration List</p>
+                <h1 class="h2 fw-bold mb-2"><?= esc($event['event_name'] ?? 'Aktiviti') ?></h1>
+                <p class="mb-0"><?= esc($event['event_date'] ?? '-') ?> · <?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?> · <?= esc($event['venue'] ?? '-') ?></p>
+            </div>
+            <div class="align-self-md-center d-flex flex-wrap gap-2">
+                <a href="<?= site_url('attendance/' . $event['id'] . '/export-pdf') ?>" class="btn btn-warning">Export PDF</a>
+                <a href="<?= site_url('participants') ?>" class="btn btn-outline-warning">Back to Activities</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="get" action="<?= site_url('attendance/' . $event['id']) ?>" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Search Participant</label>
+                <input type="search" name="q" class="form-control" placeholder="Name, ID, email, faculty, programme" value="<?= esc($filters['q'] ?? '') ?>">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
+                    <?php foreach ($statusOptions as $value => $label): ?>
+                        <option value="<?= esc($value) ?>" <?= ($filters['status'] ?? '') === $value ? 'selected' : '' ?>><?= esc($label) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary flex-fill" type="submit">Filter</button>
+                <a class="btn btn-outline-secondary" href="<?= site_url('attendance/' . $event['id']) ?>">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm border-0 uitm-card">
+            <div class="card-body">
+                <div class="text-muted fw-semibold">Total Participants</div>
+                <div class="display-6 fw-bold text-primary"><?= esc($registered ?? 0) ?></div>
+                <div class="small text-muted">Jumlah peserta mengikut carian semasa.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-warning d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-primary">Senarai Peserta Aktiviti Ini</span>
+        <span class="badge text-bg-light border"><?= esc(count($participants ?? [])) ?> peserta</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Faculty</th>
+                <th>Status</th>
+                <th class="text-end">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach (($participants ?? []) as $participant): ?>
+                <?php $status = (string) ($participant['status'] ?? 'registered'); ?>
+                <tr>
+                    <td class="fw-semibold"><?= esc($participant['full_name']) ?></td>
+                    <td><?= esc($participant['student_staff_id']) ?></td>
+                    <td><?= esc($participant['email']) ?></td>
+                    <td><?= esc($participant['faculty']) ?></td>
+                    <td><span class="badge <?= esc($statusClasses[$status] ?? 'text-bg-secondary') ?>"><?= esc($statusOptions[$status] ?? ucfirst($status)) ?></span></td>
+                    <td class="text-end">
+                        <div class="d-flex flex-wrap justify-content-end gap-1">
+                            <form method="post" action="<?= site_url('participants/' . $participant['id'] . '/attendance') ?>" class="d-inline">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="status" value="attended">
+                                <button class="btn btn-sm btn-outline-success" type="submit">Present</button>
+                            </form>
+                            <form method="post" action="<?= site_url('participants/' . $participant['id'] . '/attendance') ?>" class="d-inline">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="status" value="absent">
+                                <button class="btn btn-sm btn-outline-warning" type="submit">Absent</button>
+                            </form>
+                            <a class="btn btn-sm btn-outline-primary" href="<?= site_url('participants/' . $participant['id'] . '/edit') ?>">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" href="<?= site_url('participants/' . $participant['id'] . '/delete') ?>" onclick="return confirm('Padam peserta ini?')">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($participants ?? [])): ?>
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-5">Tiada peserta sepadan dengan carian.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?= $this->endSection() ?>

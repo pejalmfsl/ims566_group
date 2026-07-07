@@ -1,0 +1,93 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+<?php $filters = $filters ?? ['q' => '']; ?>
+<section class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4 bg-primary text-white">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <p class="text-warning fw-semibold text-uppercase mb-2">Participants</p>
+                <h1 class="h2 fw-bold mb-2">Senarai Pendaftaran Mengikut Aktiviti</h1>
+                <p class="mb-0">Setiap peserta yang berjaya daftar dikira sebagai hadir untuk aktiviti tersebut.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="get" action="<?= site_url('participants') ?>" class="row g-3 align-items-end">
+            <div class="col-md-9">
+                <label class="form-label fw-semibold">Search Activity</label>
+                <input type="search" name="q" class="form-control" placeholder="Event name, venue, description" value="<?= esc($filters['q'] ?? '') ?>">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary flex-fill" type="submit">Search</button>
+                <a class="btn btn-outline-secondary" href="<?= site_url('participants') ?>">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 uitm-card h-100">
+            <div class="card-body">
+                <div class="text-muted fw-semibold">Total Activities</div>
+                <div class="display-6 fw-bold text-primary"><?= esc($totalEvents ?? 0) ?></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 uitm-card h-100">
+            <div class="card-body">
+                <div class="text-muted fw-semibold">Total Registered / Attended</div>
+                <div class="display-6 fw-bold text-primary"><?= esc($totalRegistered ?? 0) ?></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-warning d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-primary">Aktiviti</span>
+        <span class="badge text-bg-light border"><?= esc(count($summary ?? [])) ?> aktiviti</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Aktiviti</th>
+                <th>Date</th>
+                <th>Registered / Attended</th>
+                <th class="text-end">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach (($summary ?? []) as $row): ?>
+                <?php $event = $row['event']; ?>
+                <tr>
+                    <td>
+                        <div class="fw-semibold"><?= esc($event['event_name']) ?></div>
+                        <div class="small text-muted"><?= esc($event['venue']) ?></div>
+                    </td>
+                    <td>
+                        <div><?= esc($event['event_date']) ?></div>
+                        <div class="small text-muted"><?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?></div>
+                    </td>
+                    <td><span class="badge text-bg-primary"><?= esc($row['registered']) ?></span></td>
+                    <td class="text-end">
+                        <a href="<?= site_url('attendance/' . $event['id']) ?>" class="btn btn-sm btn-outline-primary">View List</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($summary ?? [])): ?>
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-5">Tiada aktiviti sepadan dengan carian.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?= $this->endSection() ?>

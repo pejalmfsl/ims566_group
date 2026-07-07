@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\EventModel;
+use App\Models\RegistrationModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+class Attendance extends BaseController
+{
+    public function index(int $eventId)
+    {
+        [$event, $participants] = $this->getAttendanceData($eventId);
+
+        $this->data['title'] = 'Attendance';
+        $this->data['event'] = $event;
+        $this->data['participants'] = $participants;
+        $this->data['registered'] = count($participants);
+
+        return view('attendance/index', $this->data);
+    }
+
+    public function exportPdf(int $eventId)
+    {
+        [$event, $participants] = $this->getAttendanceData($eventId);
+
+        $html = view('attendance/pdf', [
+            'event' => $event,
+            'participants' => $participants,
+            'registered' => count($participants),
+            'generatedAt' => date('d/m/Y h:i A'),
+        ]);
+
+        $options = new Options();
+        $options->set('defaultFont', 'DejaVu Sans');
+        $options->set('isRemoteEnabled', false);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $filename = 'attendance-' . url_title($event['event_name'] ?? 'aktiviti', '-', true) . '.pdf';
+
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->setBody($dompdf->output());
+    }
+
+    private function getAttendanceData(int $eventId): array
+    {
+        $eventModel = new EventModel();
+        $registrationModel = new RegistrationModel();
+        $event = $eventModel->find($eventId);
+
+        if (! $event) {
+            throw PageNotFoundException::forPageNotFound('Aktiviti tidak dijumpai.');
+        }
+
+        $participants = $registrationModel
+            ->where('event_id', $eventId)
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
+
+        return [$event, $participants];
+    }
+}

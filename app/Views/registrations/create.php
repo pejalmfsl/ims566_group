@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ms">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= esc($title ?? 'Event Registration') ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= base_url('/public/assets/css/uitm-theme.css') ?>" rel="stylesheet">
+</head>
+<body class="uitm-page">
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-9">
+                <div class="text-center text-white mb-4">
+                    <img src="<?= base_url('/public/uitm-logo.svg') ?>" alt="Logo UiTM" class="img-fluid uitm-logo-sm bg-white rounded-4 shadow-sm p-3 mb-3">
+                    <p class="text-warning fw-semibold text-uppercase mb-1">Universiti Teknologi MARA</p>
+                    <h1 class="h2 fw-bold mb-0">Pendaftaran Aktiviti</h1>
+                </div>
+
+                <?php if (session()->getFlashdata('success')): ?>
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                        <?= esc(session()->getFlashdata('success')) ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (session()->getFlashdata('error')): ?>
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                        <?= esc(session()->getFlashdata('error')) ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+
+                <div class="card shadow border-0 uitm-card mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-md-8">
+                                <p class="text-warning fw-semibold text-uppercase mb-2">Event</p>
+                                <h2 class="h3 fw-bold text-primary mb-2"><?= esc($event['event_name'] ?? 'Event not found') ?></h2>
+                                <p class="text-muted mb-0"><?= esc($event['description'] ?? '') ?></p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded-3 p-3 bg-light">
+                                    <div class="small text-muted">Tarikh</div>
+                                    <div class="fw-semibold"><?= esc($event['event_date'] ?? '-') ?></div>
+                                    <div class="small text-muted mt-2">Masa</div>
+                                    <div class="fw-semibold"><?= esc(substr((string) ($event['event_time'] ?? ''), 0, 5)) ?></div>
+                                    <div class="small text-muted mt-2">Tempat</div>
+                                    <div class="fw-semibold"><?= esc($event['venue'] ?? '-') ?></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="h4 fw-bold mb-3">Maklumat Peserta</h3>
+
+                        <?php if (isset($validation)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <div class="fw-semibold mb-1">Pendaftaran tidak berjaya.</div>
+                                <?= $validation->listErrors() ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <form method="post" action="<?= site_url('register/' . ($token ?? '')) ?>">
+                            <?= csrf_field() ?>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Full Name</label>
+                                    <input type="text" name="full_name" class="form-control form-control-lg" value="<?= esc(old('full_name')) ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Student/Staff ID</label>
+                                    <input type="text" name="student_staff_id" class="form-control form-control-lg" value="<?= esc(old('student_staff_id')) ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" name="email" class="form-control form-control-lg" value="<?= esc(old('email')) ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Phone Number</label>
+                                    <input type="text" name="phone_number" class="form-control form-control-lg" value="<?= esc(old('phone_number')) ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Faculty</label>
+                                    <input type="text" name="faculty" class="form-control form-control-lg" value="<?= esc(old('faculty')) ?>" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Programme</label>
+                                    <input type="text" name="programme" class="form-control form-control-lg" value="<?= esc(old('programme')) ?>" required>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-lg mt-4 w-100" type="submit">Submit Registration</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

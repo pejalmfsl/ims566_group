@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\EventModel;
+use App\Models\RegistrationModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
+
+class Events extends BaseController
+{
+    private array $rules = [
+        'event_name' => 'required|min_length[3]|max_length[150]',
+        'venue' => 'required|max_length[150]',
+        'event_date' => 'required',
+        'event_time' => 'required',
+        'max_participants' => 'required|integer|greater_than[0]',
+        'registration_close_date' => 'required',
+        'status' => 'required|in_list[draft,open,closed]',
+    ];
+
+    public function index()
+    {
+        $model = new EventModel();
+        $keyword = trim((string) $this->request->getGet('q'));
+        $status = trim((string) $this->request->getGet('status'));
+
+        if ($keyword !== '') {
+            $model->groupStart()
+                ->like('event_name', $keyword)
+                ->orLike('venue', $keyword)
+                ->orLike('description', $keyword)
+                ->groupEnd();
+        }
+
+        if (in_array($status, ['draft', 'open', 'closed'], true)) {
+            $model->where('status', $status);
+        } else {
+            $status = '';
+        }
+
+        $this->data['title'] = 'Event Management';
+        $this->data['events'] = $model->orderBy('event_date', 'DESC')->findAll();
+        $this->data['filters'] = [
+            'q' => $keyword,
+            'status' => $status,
+        ];
+
+        return view('events/index', $this->data);
+    }
+
+    public function show(int $id)
+    {
+        $model = new EventModel();
+        $registrationModel = new RegistrationModel();
+        $event = $model->find($id);
+
+        if (! $event) {
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
+        }
+
+        $this->data['title'] = 'Event Detail';
+        $this->data['event'] = $event;
+        $this->data['registered'] = $registrationModel->where('event_id', $id)->countAllResults();
+        $this->data['attended'] = $registrationModel->where('event_id', $id)->where('status', 'attended')->countAllResults();
+        $this->data['absent'] = $registrationModel->where('event_id', $id)->where('status', 'absent')->countAllResults();
+
+        return view('events/show', $this->data);
+    }
+
+    public function create()
+    {
+        $this->data['title'] = 'Create Event';
+
+        return view('events/form', $this->data);
+    }
+
+    public function store()
+    {
+        if (! $this->validate($this->rules)) {
+            $this->data['title'] = 'Create Event';
+            $this->data['validation'] = $this->validator;
+            $this->data['event'] = $this->eventData();
+
+            return view('events/form', $this->data);
+        }
+
+        $model = new EventModel();
+        $data = $this->eventData();
+        $data['registration_token'] = $this->generateRegistrationToken((string) $data['event_name']);
+
+        $model->insert($data);
+
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya disimpan.');
+    }
+
+    public function edit(int $id)
+    {
+        $model = new EventModel();
+        $event = $model->find($id);
+
+        if (! $event) {
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
+        }
+
+        $this->data['title'] = 'Edit Event';
+        $this->data['event'] = $event;
+
+        return view('events/form', $this->data);
+    }
+
+    public function update(int $id)
+    {
+        $model = new EventModel();
+        $event = $model->find($id);
+
+        if (! $event) {
+            throw PageNotFoundException::forPageNotFound('Event tidak dijumpai.');
+        }
+
+        if (! $this->validate($this->rules)) {
+            $this->data['title'] = 'Edit Event';
+            $this->data['event'] = array_merge($event, $this->eventData());
+            $this->data['validation'] = $this->validator;
+
+            return view('events/form', $this->data);
+        }
+
+        $model->update($id, $this->eventData());
+
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya dikemaskini.');
+    }
+
+    public function delete(int $id)
+    {
+        $model = new EventModel();
+        $model->delete($id);
+
+        return redirect()->to(site_url('events'))->with('success', 'Event berjaya dipadam.');
+    }
+
+    private function eventData(): array
+    {
+        $data = $this->request->getPost([
+            'event_name',
+            'description',
+            'venue',
+            'event_date',
+            'event_time',
+            'max_participants',
+            'registration_close_date',
+            'status',
+        ]);
+
+        $data['title'] = $data['event_name'];
+        $data['max_participant'] = $data['max_participants'];
+        $data['registration_deadline'] = $data['registration_close_date'];
+
+        return $data;
+    }
+
+    private function generateRegistrationToken(string $eventName): string
+    {
+        $model = new EventModel();
+        $base = url_title($eventName, '-', true);
+        $base = trim($base, '-') ?: 'event';
+
+        do {
+            $token = $base . '-' . bin2hex(random_bytes(4));
+        } while ($model->where('registration_token', $token)->first() !== null);
+
+        return $token;
+    }
+}
