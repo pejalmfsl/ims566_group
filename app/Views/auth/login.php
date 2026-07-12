@@ -57,6 +57,9 @@
                                 <label class="form-label fw-semibold">Password</label>
                                 <input type="password" name="password" class="form-control form-control-lg" required>
                             </div>
+                            *Demo Account Superadmin: superadmin/Password123!
+                            <br>
+                            *Demo Account Admin: admin/123456
                             <button class="btn btn-primary btn-lg w-100" type="submit">Login</button>
                         </form>
 

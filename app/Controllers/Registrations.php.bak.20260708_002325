@@ -58,7 +58,9 @@ class Registrations extends BaseController
         $registrationModel->insert([
             'event_id' => $event['id'],
             'full_name' => $fullName,
+            'fullname' => $fullName,
             'student_staff_id' => $studentStaffId,
+            'student_id' => $studentStaffId,
             'email' => $this->request->getPost('email'),
             'phone_number' => $this->request->getPost('phone_number'),
             'faculty' => $this->request->getPost('faculty'),

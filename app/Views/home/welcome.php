@@ -30,8 +30,8 @@
                         <h2 class="h4 fw-bold mb-3 text-primary">Akses Sistem</h2>
                         <p class="text-muted mb-4">Log in to manage events, participants, and attendance records.</p>
                         <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-                            <a href="<?= site_url('login') ?>" class="btn btn-primary btn-lg">Login</a>
-                            <a href="<?= site_url('login') ?>" class="btn btn-outline-warning btn-lg">Terus ke Sistem</a>
+                            <a href="<?= site_url('login') ?>" class="btn btn-primary btn-lg">Enter</a>
+                            <!-- <a href="<?= site_url('login') ?>" class="btn btn-outline-warning btn-lg">Terus ke Sistem</a> -->
                         </div>
                     </div>
                 </div>
